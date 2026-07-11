@@ -15,12 +15,19 @@ public static class GetCategories
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Send GET request to https://themealdb.com/api/json/v1/1/categories.php
-        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/lookup.php?i=52771");
+        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/categories.php");
 
         // TODO: Assert status code is 200 OK
-        // TODO: Parse the response JSON
-        // TODO: Assert the "categories" array has more than 0 items
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Status code is not 200 OK");
 
-        throw new NotImplementedException();
+        // TODO: Parse the response JSON
+        var body = await response.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(body);
+
+        // TODO: Assert the "categories" array has more than 0 items
+        var categories = doc.RootElement.GetProperty("categories");
+        if (categories.GetArrayLength() <= 0)
+            throw new Exception("Categories array has 0 items");
     }
 }
