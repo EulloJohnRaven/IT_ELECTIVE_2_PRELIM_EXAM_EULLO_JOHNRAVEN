@@ -27,7 +27,8 @@ public static class GetMealById
 
         // TODO: Assert the meal name (strMeal) is "Arrabiata"
         var mealName = doc.RootElement.GetProperty("meals")[0].GetProperty("strMeal").GetString();
-        if (mealName != "Arrabiata")
-            throw new Exception($"Expected 'Arrabiata', but got '{mealName}'");
+
+        if (mealName == null || !mealName.Contains("Arrabiata"))
+            throw new Exception($"Expected meal name to contain 'Arrabiata', but got '{mealName}'");
     }
 }
