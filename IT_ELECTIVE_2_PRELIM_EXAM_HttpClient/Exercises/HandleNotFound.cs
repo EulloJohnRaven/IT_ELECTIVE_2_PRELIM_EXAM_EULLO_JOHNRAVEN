@@ -17,10 +17,19 @@ public static class HandleNotFound
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Send GET request to https://themealdb.com/api/json/v1/1/lookup.php?i=999999
-        // TODO: Assert status code is 200 OK
-        // TODO: Parse the response JSON
-        // TODO: Assert that "meals" field is null (not found)
+        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/lookup.php?i=999999");
 
-        throw new NotImplementedException();
+        // TODO: Assert status code is 200 OK
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Status code is not 200 OK");
+
+        // TODO: Parse the response JSON
+        var body = await response.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(body);
+
+        // TODO: Assert that "meals" field is null (not found)
+        var meals = doc.RootElement.GetProperty("meals");
+        if (meals.ValueKind != System.Text.Json.JsonValueKind.Null)
+            throw new Exception("Expected 'meals' to be null, but it wasn't");
     }
 }
