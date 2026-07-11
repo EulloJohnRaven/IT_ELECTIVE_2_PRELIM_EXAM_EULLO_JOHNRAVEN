@@ -17,6 +17,7 @@ public static class GetRandomMeal
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Send GET request to https://themealdb.com/api/json/v1/1/random.php
+        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/random.php");
         // TODO: Read the response content as a string
         // TODO: Assert status code is 200 OK
         // TODO: Assert response body is not null or empty
