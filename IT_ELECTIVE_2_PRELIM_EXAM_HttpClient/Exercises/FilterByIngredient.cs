@@ -18,9 +18,18 @@ public static class FilterByIngredient
         var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/filter.php?i=chicken_breast");
 
         // TODO: Assert status code is 200 OK
-        // TODO: Parse the response JSON
-        // TODO: Assert the "meals" array has at least 1 item
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Status code is not 200 OK");
 
-        throw new NotImplementedException();
+        // TODO: Parse the response JSON
+        var body = await response.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(body);
+
+        // TODO: Assert the "meals" array has at least 1 item
+        var meals = doc.RootElement.GetProperty("meals");
+        if (meals.ValueKind == System.Text.Json.JsonValueKind.Null || meals.GetArrayLength() < 1)
+        {
+            throw new Exception("Meals array is null or empty");
+        }
     }
 }
