@@ -8,15 +8,34 @@ namespace IT_ELECTIVE_2_PRELIM_EXAM.Models;
 
 public class Ingredient
 {
-    public string Name { get; set; }
+    private string _name;
+    private double _quantity;
+
+    public string Name
+    {
+        get { return _name; }
+        set
+        {
+            if (string.IsNullOrEmpty(value)) throw new ArgumentException();
+            _name = value;
+        }
+    }
     public string Measure { get; set; }
-    public double Quantity { get; set; }
+    public double Quantity
+    {
+        get { return _quantity; }
+        set
+        {
+            if (value < 0) throw new ArgumentOutOfRangeException();
+            _quantity = value;
+        }
+    }
 
     public Ingredient()
     {
-        Name = "";
+        _name = "Unknown"; // Set backing field directly to avoid empty string exception on default init
         Measure = "";
-        Quantity = 0;
+        _quantity = 0;
     }
 
     public Ingredient(string name, string measure, double quantity)
