@@ -15,6 +15,8 @@ public static class GetMealById
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Send GET request to https://themealdb.com/api/json/v1/1/lookup.php?i=52771
+        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/search.php?s=Arrabiata");
+
         // TODO: Assert status code is 200 OK
         // TODO: Parse the response JSON
         // TODO: Assert the meal name (strMeal) is "Arrabiata"
