@@ -26,12 +26,27 @@ public static class DeserializeMeals
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Send GET request to https://themealdb.com/api/json/v1/1/search.php?f=a
-        // TODO: Assert status code is 200 OK
-        // TODO: Parse the response JSON
-        // TODO: Get the "meals" array
-        // TODO: Assert the array has more than 0 items
-        // TODO: Loop through and print each meal's strMeal
+        var response = await client.GetAsync("https://themealdb.com/api/json/v1/1/search.php?f=a");
 
-        throw new NotImplementedException();
+        // TODO: Assert status code is 200 OK
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Status code is not 200 OK");
+
+        // TODO: Parse the response JSON
+        var body = await response.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(body);
+
+        // TODO: Get the "meals" array
+        var meals = doc.RootElement.GetProperty("meals");
+
+        // TODO: Assert the array has more than 0 items
+        if (meals.GetArrayLength() <= 0)
+            throw new Exception("Meals array has 0 items");
+
+        // TODO: Loop through and print each meal's strMeal
+        foreach (var meal in meals.EnumerateArray())
+        {
+            Console.WriteLine(meal.GetProperty("strMeal").GetString());
+        }
     }
 }
