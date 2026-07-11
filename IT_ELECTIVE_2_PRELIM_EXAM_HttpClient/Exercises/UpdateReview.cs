@@ -17,12 +17,25 @@ public static class UpdateReview
     public static async Task Run(System.Net.Http.HttpClient client)
     {
         // TODO: Create JSON string with id, title, body, and userId
-        // TODO: Create StringContent with the JSON and Content-Type "application/json"
-        // TODO: Send PUT request to https://jsonplaceholder.typicode.com/posts/1
-        // TODO: Assert status code is 200 OK
-        // TODO: Parse the response JSON
-        // TODO: Assert the title is "Updated Review"
+        string json = "{ \"id\": 1, \"title\": \"Updated Review\", \"body\": \"Even better than before!\", \"userId\": 1 }";
 
-        throw new NotImplementedException();
+        // TODO: Create StringContent with the JSON and Content-Type "application/json"
+        var content = new System.Net.Http.StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+        // TODO: Send PUT request to https://jsonplaceholder.typicode.com/posts/1
+        var response = await client.PutAsync("https://jsonplaceholder.typicode.com/posts/1", content);
+
+        // TODO: Assert status code is 200 OK
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Status code is not 200 OK");
+
+        // TODO: Parse the response JSON
+        var body = await response.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(body);
+
+        // TODO: Assert the title is "Updated Review"
+        var title = doc.RootElement.GetProperty("title").GetString();
+        if (title != "Updated Review")
+            throw new Exception($"Expected title 'Updated Review', got '{title}'");
     }
 }
